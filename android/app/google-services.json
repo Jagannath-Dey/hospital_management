@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "178733000509",
+    "project_id": "hospital-management-app-886db",
+    "storage_bucket": "hospital-management-app-886db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178733000509:android:0c605e6a4a516284b74754",
+        "android_client_info": {
+          "package_name": "com.example.hospital_management_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAbOr12xbe3as-IU_6n72cxI_e2emrqws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
