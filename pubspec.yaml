@@ -28,6 +28,7 @@ dependencies:
   printing: ^5.11.1
   cached_network_image: ^3.3.0
   image_picker: ^1.0.5
+  url_launcher: ^6.3.2
 #  firebase_app_check: ^0.2.1+8
 
   # Forms & Validation

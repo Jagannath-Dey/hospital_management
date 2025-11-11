@@ -406,247 +406,385 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            // Header Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Prescription',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const Expanded(
+                  child: Text(
+                    'Prescription',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                TextButton.icon(
-                  onPressed: _addMedicineEntry,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Medicine'),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: TextButton.icon(
+                    onPressed: _addMedicineEntry,
+                    icon: const Icon(Icons.add, size: 20),
+                    label: const Text(
+                      'Add Medicine',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            if (_medicines.isEmpty)
-              Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.medication_outlined,
-                      size: 48,
-                      color: Colors.grey[400],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'No medicines added',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: _addMedicineEntry,
-                      child: const Text('Add First Medicine'),
-                    ),
-                  ],
-                ),
-              )
-            else
-              ..._medicines.asMap().entries.map((entry) {
-                int index = entry.key;
-                MedicineEntry medicine = entry.value;
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey[300]!),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Medicine ${index + 1}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _removeMedicineEntry(index),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: medicine.nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Medicine Name *',
-                          hintText: 'e.g., Paracetamol',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter medicine name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: medicine.dosageController,
-                              decoration: const InputDecoration(
-                                labelText: 'Dosage *',
-                                hintText: 'e.g., 500mg',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter dosage';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              value: medicine.frequency,
-                              decoration: const InputDecoration(
-                                labelText: 'Frequency *',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                              ),
-                              items: [
-                                'Once daily',
-                                'Twice daily',
-                                'Thrice daily',
-                                'Four times daily',
-                                'Every 4 hours',
-                                'Every 6 hours',
-                                'Every 8 hours',
-                                'Every 12 hours',
-                                'As needed',
-                                'Before meals',
-                                'After meals',
-                              ].map((freq) {
-                                return DropdownMenuItem(
-                                  value: freq,
-                                  child: Text(
-                                    freq,
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  medicine.frequency = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: medicine.durationController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              decoration: const InputDecoration(
-                                labelText: 'Duration (days) *',
-                                hintText: 'e.g., 7',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter duration';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              value: medicine.timing,
-                              decoration: const InputDecoration(
-                                labelText: 'Timing',
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                              ),
-                              items: [
-                                'Before Food',
-                                'After Food',
-                                'With Food',
-                                'Empty Stomach',
-                                'Anytime',
-                              ].map((time) {
-                                return DropdownMenuItem(
-                                  value: time,
-                                  child: Text(
-                                    time,
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  medicine.timing = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: medicine.instructionsController,
-                        decoration: const InputDecoration(
-                          labelText: 'Special Instructions (Optional)',
-                          hintText: 'e.g., Take with plenty of water',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
+            // Empty State or Medicine List
+            if (_medicines.isEmpty)
+              _buildEmptyState()
+            else
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _medicines.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                itemBuilder: (context, index) {
+                  return _buildMedicineEntry(index, _medicines[index]);
+                },
+              ),
           ],
         ),
       ),
+    );
+  }
+
+// Empty State Widget
+  Widget _buildEmptyState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.medication_outlined,
+              size: 48,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'No medicines added',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _addMedicineEntry,
+              icon: const Icon(Icons.add, size: 20),
+              label: const Text('Add First Medicine'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+// Individual Medicine Entry Widget
+  Widget _buildMedicineEntry(int index, MedicineEntry medicine) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header with delete button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'Medicine ${index + 1}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 22),
+                onPressed: () => _removeMedicineEntry(index),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(
+                  minWidth: 40,
+                  minHeight: 40,
+                ),
+                tooltip: 'Remove medicine',
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Medicine Name
+          TextFormField(
+            controller: medicine.nameController,
+            decoration: const InputDecoration(
+              labelText: 'Medicine Name *',
+              hintText: 'e.g., Paracetamol',
+              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
+              prefixIcon: Icon(Icons.medical_services_outlined, size: 20),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter medicine name';
+              }
+              return null;
+            },
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 12),
+
+          // Dosage and Frequency Row
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Use column layout for small screens
+              if (constraints.maxWidth < 400) {
+                return Column(
+                  children: [
+                    _buildDosageField(medicine),
+                    const SizedBox(height: 12),
+                    _buildFrequencyDropdown(medicine),
+                  ],
+                );
+              }
+
+              // Use row layout for larger screens
+              return IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _buildDosageField(medicine)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _buildFrequencyDropdown(medicine)),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+
+          // Duration and Timing Row
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Use column layout for small screens
+              if (constraints.maxWidth < 400) {
+                return Column(
+                  children: [
+                    _buildDurationField(medicine),
+                    const SizedBox(height: 12),
+                    _buildTimingDropdown(medicine),
+                  ],
+                );
+              }
+
+              // Use row layout for larger screens
+              return IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _buildDurationField(medicine)),
+                    const SizedBox(width: 12),
+                    Expanded(child: _buildTimingDropdown(medicine)),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+
+          // Special Instructions
+          TextFormField(
+            controller: medicine.instructionsController,
+            decoration: const InputDecoration(
+              labelText: 'Special Instructions (Optional)',
+              hintText: 'e.g., Take with plenty of water',
+              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
+              prefixIcon: Icon(Icons.info_outline, size: 20),
+            ),
+            maxLines: 2,
+            minLines: 1,
+            textInputAction: TextInputAction.done,
+          ),
+        ],
+      ),
+    );
+  }
+
+// Dosage Field
+  Widget _buildDosageField(MedicineEntry medicine) {
+    return TextFormField(
+      controller: medicine.dosageController,
+      decoration: const InputDecoration(
+        labelText: 'Dosage *',
+        hintText: 'e.g., 500mg',
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        prefixIcon: Icon(Icons.medication, size: 20),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter dosage';
+        }
+        return null;
+      },
+      textInputAction: TextInputAction.next,
+    );
+  }
+
+// Frequency Dropdown
+  Widget _buildFrequencyDropdown(MedicineEntry medicine) {
+    return DropdownButtonFormField<String>(
+      value: medicine.frequency,
+      decoration: const InputDecoration(
+        labelText: 'Frequency *',
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        prefixIcon: Icon(Icons.schedule, size: 20),
+      ),
+      isExpanded: true,
+      items: [
+        'Once daily',
+        'Twice daily',
+        'Thrice daily',
+        'Four times daily',
+        'Every 4 hours',
+        'Every 6 hours',
+        'Every 8 hours',
+        'Every 12 hours',
+        'As needed',
+        'Before meals',
+        'After meals',
+      ].map((freq) {
+        return DropdownMenuItem(
+          value: freq,
+          child: Text(
+            freq,
+            style: const TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            medicine.frequency = value;
+          });
+        }
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Select frequency';
+        }
+        return null;
+      },
+    );
+  }
+
+// Duration Field
+  Widget _buildDurationField(MedicineEntry medicine) {
+    return TextFormField(
+      controller: medicine.durationController,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      decoration: const InputDecoration(
+        labelText: 'Duration (days) *',
+        hintText: 'e.g., 7',
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        prefixIcon: Icon(Icons.calendar_today, size: 20),
+        suffixText: 'days',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter duration';
+        }
+        final number = int.tryParse(value);
+        if (number == null || number <= 0) {
+          return 'Invalid';
+        }
+        return null;
+      },
+      textInputAction: TextInputAction.next,
+    );
+  }
+
+// Timing Dropdown
+  Widget _buildTimingDropdown(MedicineEntry medicine) {
+    return DropdownButtonFormField<String>(
+      value: medicine.timing,
+      decoration: const InputDecoration(
+        labelText: 'Timing',
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        prefixIcon: Icon(Icons.restaurant, size: 20),
+      ),
+      isExpanded: true,
+      items: [
+        'Before Food',
+        'After Food',
+        'With Food',
+        'Empty Stomach',
+        'Anytime',
+      ].map((time) {
+        return DropdownMenuItem(
+          value: time,
+          child: Text(
+            time,
+            style: const TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            medicine.timing = value;
+          });
+        }
+      },
     );
   }
 

@@ -13,7 +13,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PatientProfile extends StatefulWidget {
-  const PatientProfile({Key? key}) : super(key: key);
+  const PatientProfile({super.key});
 
   @override
   State<PatientProfile> createState() => _PatientProfileState();
@@ -46,7 +46,7 @@ class _PatientProfileState extends State<PatientProfile>
   String _bloodGroup = 'A+';
   List<String> _allergies = [];
   List<String> _chronicConditions = [];
-  List<String> _currentMedications = [];
+  final List<String> _currentMedications = [];
 
   final List<String> _bloodGroups = [
     'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
@@ -278,7 +278,7 @@ class _PatientProfileState extends State<PatientProfile>
                         labelText: 'Phone Number',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.phone),
-                        prefixText: '+1 ',
+                        prefixText: '+8 ',
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -297,7 +297,7 @@ class _PatientProfileState extends State<PatientProfile>
                     _buildInfoRow('Patient ID', _patient!.id.substring(0, 8)),
                     _buildInfoRow('Full Name', _patient!.fullName),
                     _buildInfoRow('Email', _patient!.email),
-                    _buildInfoRow('Phone', '+1 ${_patient!.phone}'),
+                    _buildInfoRow('Phone', '+8 ${_patient!.phone}'),
                     _buildInfoRow(
                       'Date of Birth',
                       DateFormat('MMMM d, y').format(_patient!.dateOfBirth),
@@ -372,7 +372,7 @@ class _PatientProfileState extends State<PatientProfile>
                         labelText: 'Phone Number',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.phone),
-                        prefixText: '+1 ',
+                        prefixText: '+8 ',
                       ),
                     ),
                   ] else ...[
@@ -402,7 +402,7 @@ class _PatientProfileState extends State<PatientProfile>
                                   ),
                                 ),
                                 Text(
-                                  '+1 ${_patient!.emergencyContact}',
+                                  '+8 ${_patient!.emergencyContact}',
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

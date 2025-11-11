@@ -5,7 +5,7 @@ import 'package:hospital_management_app/services/auth_service.dart';
 import 'package:intl/intl.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -32,8 +32,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   DateTime? _dateOfBirth;
   String _gender = 'Male';
   String _bloodGroup = 'A+';
-  List<String> _allergies = [];
-  List<String> _chronicConditions = [];
+  final List<String> _allergies = [];
+  final List<String> _chronicConditions = [];
   final _allergyController = TextEditingController();
   final _conditionController = TextEditingController();
 
@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _consultationFeeController = TextEditingController();
   String _startTime = '09:00';
   String _endTime = '17:00';
-  List<String> _availableDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  final List<String> _availableDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   // Admin specific fields
   final _adminCodeController = TextEditingController();
@@ -374,20 +374,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
+                LengthLimitingTextInputFormatter(11),
               ],
               decoration: const InputDecoration(
                 labelText: 'Phone Number',
                 prefixIcon: Icon(Icons.phone_outlined),
                 border: OutlineInputBorder(),
-                prefixText: '+1 ',
+                prefixText: '+88 ',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your phone number';
                 }
-                if (value.length != 10) {
-                  return 'Please enter a valid 10-digit phone number';
+                if (value.length != 11) {
+                  return 'Please enter a valid 11-digit phone number';
                 }
                 return null;
               },
@@ -450,7 +450,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return 'Please enter admin access code';
                   }
                   // In production, validate against secure admin codes
-                  if (value != 'ADMIN2024') {
+                  if (value != 'ADMIN1234') {
                     return 'Invalid admin access code';
                   }
                   return null;
@@ -841,7 +841,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 labelText: 'Qualification',
                 prefixIcon: Icon(Icons.school),
                 border: OutlineInputBorder(),
-                helperText: 'e.g., MBBS, MD, MS',
+                helperText: 'e.g., MBBS, MS, FACS, FCPS' ,
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -896,9 +896,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
               decoration: const InputDecoration(
                 labelText: 'Consultation Fee',
-                prefixIcon: Icon(Icons.attach_money),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    '৳',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 border: OutlineInputBorder(),
-                helperText: 'Fee per consultation in USD',
+                helperText: 'Fee per consultation in BDT',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -1248,7 +1254,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Your ${_userType} account has been created successfully.',
+                'Your $_userType account has been created successfully.',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),

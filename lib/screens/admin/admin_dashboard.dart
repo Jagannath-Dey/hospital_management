@@ -4,15 +4,13 @@ import 'package:hospital_management_app/services/auth_service.dart';
 import 'package:hospital_management_app/services/database_service.dart';
 import 'package:hospital_management_app/models/patient.dart';
 import 'package:hospital_management_app/models/doctor.dart';
-import 'package:hospital_management_app/models/appointment.dart';
-import 'package:hospital_management_app/models/billing.dart';
 import 'package:hospital_management_app/screens/admin/billing_screen.dart';
 import 'package:hospital_management_app/screens/admin/reports_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class AdminDashboard extends StatefulWidget {
-  const AdminDashboard({Key? key}) : super(key: key);
+  const AdminDashboard({super.key});
 
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
@@ -25,8 +23,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   bool _isLoading = true;
 
   // Date range for analytics
-  DateTime _startDate = DateTime.now().subtract(const Duration(days: 30));
-  DateTime _endDate = DateTime.now();
+  final DateTime _startDate = DateTime.now().subtract(const Duration(days: 30));
+  final DateTime _endDate = DateTime.now();
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       _buildDashboard(),
       _buildUsersManagement(),
       _buildAppointmentsManagement(),
@@ -59,7 +57,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     ];
 
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {
@@ -96,10 +94,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+//--------------------------- Dashboard ---------------------------
   Widget _buildDashboard() {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -173,13 +173,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
       elevation: 4,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
               Colors.deepPurple,
-              Colors.deepPurple.withOpacity(0.8),
+              Colors.deepPurple.withValues(alpha: 0.8),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -197,8 +197,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     Text(
                       'Welcome Admin',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 16,
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -206,7 +206,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       'Hospital Management System',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -215,8 +215,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
                     Icons.admin_panel_settings,
@@ -230,7 +230,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             Text(
               DateFormat('EEEE, MMMM d, y').format(DateTime.now()),
               style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 14,
               ),
             ),
@@ -277,7 +277,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
-      childAspectRatio: 1.5,
+      childAspectRatio: 1.2, // Changed from 1.5 to give more height
       children: [
         _buildStatCard(
           'Total Patients',
@@ -325,56 +325,73 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ) {
     return Card(
       elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      child: Container(
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: color, size: 20),
+                  child: Icon(icon, color: color, size: 18),
                 ),
                 if (showTrend)
-                  Icon(
+                  const Icon(
                     Icons.trending_up,
                     color: Colors.green,
-                    size: 20,
+                    size: 18,
                   ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
-            if (subtitle.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: showTrend ? Colors.green : Colors.grey[500],
+            const SizedBox(height: 4),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        value,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: showTrend ? Colors.green : Colors.grey[500],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
                 ),
               ),
-            ],
+            ),
           ],
         ),
       ),
@@ -493,7 +510,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       dotData: const FlDotData(show: false),
                       belowBarData: BarAreaData(
                         show: true,
-                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                       ),
                     ),
                   ],
@@ -504,8 +521,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildChartLegend('Total Revenue', '\$25,400', Colors.green),
-                _buildChartLegend('Avg. Daily', '\$3,628', Colors.blue),
+                _buildChartLegend('Total Revenue', '25,400', Colors.green),
+                _buildChartLegend('Avg. Daily', '3,628', Colors.blue),
                 _buildChartLegend('Growth', '+18%', Colors.orange),
               ],
             ),
@@ -628,7 +645,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -640,7 +657,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       {
         'type': 'appointment',
         'title': 'New appointment scheduled',
-        'subtitle': 'John Doe with Dr. Smith',
+        'subtitle': 'Dr.Palash kumar Dey',
         'time': '5 minutes ago',
         'icon': Icons.calendar_today,
         'color': Colors.blue,
@@ -648,7 +665,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       {
         'type': 'patient',
         'title': 'New patient registered',
-        'subtitle': 'Jane Wilson',
+        'subtitle': 'Dr.Palash kumar Dey',
         'time': '15 minutes ago',
         'icon': Icons.person_add,
         'color': Colors.green,
@@ -656,7 +673,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       {
         'type': 'payment',
         'title': 'Payment received',
-        'subtitle': '\$450 from Michael Brown',
+        'subtitle': '450 from Michael Brown',
         'time': '1 hour ago',
         'icon': Icons.payment,
         'color': Colors.orange,
@@ -664,7 +681,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       {
         'type': 'doctor',
         'title': 'Doctor status updated',
-        'subtitle': 'Dr. Johnson is now available',
+        'subtitle': 'Dr.Palash kumar Dey',
         'time': '2 hours ago',
         'icon': Icons.medical_services,
         'color': Colors.purple,
@@ -705,7 +722,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: (activity['color'] as Color).withOpacity(0.1),
+                        color: (activity['color'] as Color).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
@@ -745,7 +762,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -842,10 +859,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
           ),
         ),
         child: Column(
@@ -866,6 +883,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  //-------------------------- User Management ---------------------------
   Widget _buildUsersManagement() {
     return DefaultTabController(
       length: 3,
@@ -935,7 +953,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue.withOpacity(0.1),
+                  backgroundColor: Colors.blue.withValues(alpha: 0.1),
                   child: Text(
                     patient.firstName.substring(0, 1),
                     style: const TextStyle(
@@ -1034,7 +1052,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: _getStatusColor(doctor.status).withOpacity(0.1),
+                  backgroundColor: _getStatusColor(doctor.status).withValues(alpha: 0.1),
                   child: Text(
                     doctor.firstName.substring(0, 1),
                     style: TextStyle(
@@ -1141,10 +1159,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget _buildStaffList() {
     // Sample staff data
     final staff = [
-      {'name': 'Sarah Johnson', 'role': 'Nurse', 'department': 'Emergency'},
-      {'name': 'Mike Wilson', 'role': 'Receptionist', 'department': 'Front Desk'},
-      {'name': 'Emily Brown', 'role': 'Lab Technician', 'department': 'Laboratory'},
-      {'name': 'David Lee', 'role': 'Pharmacist', 'department': 'Pharmacy'},
+      {'name': 'Oeishik mandal', 'role': 'Nurse', 'department': 'Emergency'},
+      {'name': 'Sakibul Islam', 'role': 'Receptionist', 'department': 'Front Desk'},
+      {'name': 'Mridha', 'role': 'Lab Technician', 'department': 'Laboratory'},
+      {'name': 'Saeem', 'role': 'Pharmacist', 'department': 'Pharmacy'},
     ];
 
     return ListView.builder(
@@ -1156,7 +1174,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.purple.withOpacity(0.1),
+              backgroundColor: Colors.purple.withValues(alpha: 0.1),
               child: Text(
                 member['name']!.substring(0, 1),
                 style: const TextStyle(
@@ -1191,6 +1209,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  //---------------------Appointments Management----------------------
   Widget _buildAppointmentsManagement() {
     return Scaffold(
       appBar: AppBar(
@@ -1249,14 +1268,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: _getAppointmentStatusColor(status).withOpacity(0.1),
+              backgroundColor: _getAppointmentStatusColor(status).withValues(alpha: 0.1),
               child: Icon(
                 _getAppointmentIcon(status),
                 color: _getAppointmentStatusColor(status),
               ),
             ),
             title: const Text(
-              'John Doe - Dr. Smith',
+              'DR.Palash Kumar Dey',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Column(
@@ -1301,6 +1320,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+//------------------Financial Overview------------------------------
   Widget _buildFinancialOverview() {
     return Scaffold(
       appBar: AppBar(
@@ -1331,7 +1351,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Expanded(
                   child: _buildFinancialCard(
                     'Total Revenue',
-                    '\$125,400',
+                    '125,400',
                     Icons.attach_money,
                     Colors.green,
                     '+15%',
@@ -1341,7 +1361,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Expanded(
                   child: _buildFinancialCard(
                     'Pending Payments',
-                    '\$12,300',
+                    '12,300',
                     Icons.pending,
                     Colors.orange,
                     '23 bills',
@@ -1355,7 +1375,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Expanded(
                   child: _buildFinancialCard(
                     'Today\'s Collection',
-                    '\$4,520',
+                    '4,520',
                     Icons.today,
                     Colors.blue,
                     '12 transactions',
@@ -1365,7 +1385,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Expanded(
                   child: _buildFinancialCard(
                     'Monthly Average',
-                    '\$35,200',
+                    '35,200',
                     Icons.analytics,
                     Colors.purple,
                     '+8%',
@@ -1410,7 +1430,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.green.withOpacity(0.1),
+                    backgroundColor: Colors.green.withValues(alpha: 0.1),
                     child: const Icon(
                       Icons.payment,
                       color: Colors.green,
@@ -1418,10 +1438,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                   title: Text('Patient ${index + 1}'),
                   subtitle: Text(
-                    'Bill #${1000 + index} - ${DateFormat('MMM d, y').format(DateTime.now())}',
+                    'Bill #{1000 + index} - ${DateFormat('MMM d, y').format(DateTime.now())}',
                   ),
                   trailing: Text(
-                    '\$${(500 + index * 50).toString()}',
+                    (500 + index * 50).toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -1456,7 +1476,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(icon, color: color, size: 20),
@@ -1491,6 +1511,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  //---------------------------- Settings ------------------------------
   Widget _buildSettings() {
     return Scaffold(
       appBar: AppBar(
@@ -1621,14 +1642,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   },
                 ),
                 const Divider(height: 1),
-                SwitchListTile(
-                  title: const Text('SMS Notifications'),
-                  subtitle: const Text('Send appointment reminders via SMS'),
-                  value: false,
-                  onChanged: (value) {
-                    // Toggle SMS notifications
-                  },
-                ),
+                // SwitchListTile(
+                //   title: const Text('SMS Notifications'),
+                //   subtitle: const Text('Send appointment reminders via SMS'),
+                //   value: false,
+                //   onChanged: (value) {
+                //     // Toggle SMS notifications
+                //   },
+                // ),
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.notification_important),
@@ -1699,7 +1720,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               _buildDetailRow('Specialization', doctor.specialization),
               _buildDetailRow('License', doctor.licenseNumber),
               _buildDetailRow('Experience', '${doctor.experienceYears} years'),
-              _buildDetailRow('Consultation Fee', '\$${doctor.consultationFee}'),
+              _buildDetailRow('Consultation Fee', '{doctor.consultationFee}'),
               _buildDetailRow('Working Days', doctor.availableDays.join(', ')),
               _buildDetailRow('Timing', '${doctor.startTime} - ${doctor.endTime}'),
               _buildDetailRow('Status', doctor.status),

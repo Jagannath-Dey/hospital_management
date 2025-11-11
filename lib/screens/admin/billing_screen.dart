@@ -63,6 +63,7 @@ class _BillingScreenState extends State<BillingScreen>
     super.dispose();
   }
 
+  //------------------------- Billing Management ---------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +170,7 @@ class _BillingScreenState extends State<BillingScreen>
             Expanded(
               child: _buildStatCard(
                 'Total Revenue',
-                '\$${_formatCurrency(_stats['totalRevenue'])}',
+                _formatCurrency(_stats['totalRevenue']),
                 Icons.account_balance_wallet,
                 Colors.green,
                 '+15% from last month',
@@ -179,10 +180,10 @@ class _BillingScreenState extends State<BillingScreen>
             Expanded(
               child: _buildStatCard(
                 'Pending Amount',
-                '\$${_formatCurrency(_stats['pendingAmount'])}',
+                _formatCurrency(_stats['pendingAmount']),
                 Icons.pending_actions,
                 Colors.orange,
-                '${_calculatePendingBills()} bills',
+                '{_calculatePendingBills()} bills',
               ),
             ),
           ],
@@ -193,7 +194,7 @@ class _BillingScreenState extends State<BillingScreen>
             Expanded(
               child: _buildStatCard(
                 'Today\'s Collection',
-                '\$${_formatCurrency(_stats['todayCollection'])}',
+                _formatCurrency(_stats['todayCollection']),
                 Icons.today,
                 Colors.blue,
                 '${_calculateTodayTransactions()} transactions',
@@ -203,7 +204,7 @@ class _BillingScreenState extends State<BillingScreen>
             Expanded(
               child: _buildStatCard(
                 'Overdue Amount',
-                '\$${_formatCurrency(_stats['overdueAmount'])}',
+                _formatCurrency(_stats['overdueAmount']),
                 Icons.warning,
                 Colors.red,
                 'Requires attention',
@@ -278,6 +279,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //------------------------- Revenue Trend -------------------------
   Widget _buildRevenueChart() {
     return Card(
       elevation: 2,
@@ -326,7 +328,7 @@ class _BillingScreenState extends State<BillingScreen>
                       //tooltipBgColor: Colors.blueGrey,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         return BarTooltipItem(
-                          '\$${rod.toY.toStringAsFixed(0)}',
+                          rod.toY.toStringAsFixed(0),
                           const TextStyle(color: Colors.white),
                         );
                       },
@@ -358,7 +360,7 @@ class _BillingScreenState extends State<BillingScreen>
                         reservedSize: 40,
                         getTitlesWidget: (value, meta) {
                           return Text(
-                            '\$${value.toInt()}',
+                            '${value.toInt()}',
                             style: const TextStyle(fontSize: 10),
                           );
                         },
@@ -412,7 +414,7 @@ class _BillingScreenState extends State<BillingScreen>
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Row(
               children: [
                 SizedBox(
@@ -465,11 +467,11 @@ class _BillingScreenState extends State<BillingScreen>
                             Expanded(
                               child: Text(
                                 method['method'] as String,
-                                style: const TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 10),
                               ),
                             ),
                             Text(
-                              '\$${_formatCurrency(method['amount'] as int)}',
+                              _formatCurrency(method['amount'] as int),
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -489,6 +491,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //------------------------- Recent Transactions --------------------------
   Widget _buildRecentTransactions() {
     return Card(
       elevation: 2,
@@ -578,7 +581,7 @@ class _BillingScreenState extends State<BillingScreen>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '\$${(500 + index * 50).toString()}',
+                          (500 + index * 50).toString(),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -617,6 +620,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //----------------------- Billing Management -----------------------
   Widget _buildBillsTab() {
     return Column(
       children: [
@@ -706,6 +710,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //-------------------------- Bill --------------------------
   Widget _buildBillCard(Billing bill) {
     final isPaid = bill.paymentStatus == 'paid';
     final isOverdue = !isPaid &&
@@ -885,11 +890,11 @@ class _BillingScreenState extends State<BillingScreen>
                           item.description,
                           '\$${item.total.toStringAsFixed(2)}',
                         );
-                      }).toList(),
+                      }),
                       if (bill.items.length > 2) ...[
                         const SizedBox(height: 4),
                         Text(
-                          '+ ${bill.items.length - 2} more items',
+                          '+ {bill.items.length - 2} more items',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],
@@ -901,7 +906,7 @@ class _BillingScreenState extends State<BillingScreen>
                     const Divider(height: 16),
                     _buildBillRow(
                       'Total Amount',
-                      '\$${bill.totalAmount.toStringAsFixed(2)}',
+                      bill.totalAmount.toStringAsFixed(2),
                       isBold: true,
                     ),
                   ],
@@ -1002,6 +1007,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //----------------------------- Payment ---------------------------
   Widget _buildPaymentsTab() {
     return Column(
       children: [
@@ -1013,7 +1019,7 @@ class _BillingScreenState extends State<BillingScreen>
               Expanded(
                 child: _buildPaymentStatCard(
                   'Today\'s Collection',
-                  '\$4,520',
+                  '4,520',
                   Colors.green,
                 ),
               ),
@@ -1021,7 +1027,7 @@ class _BillingScreenState extends State<BillingScreen>
               Expanded(
                 child: _buildPaymentStatCard(
                   'This Week',
-                  '\$28,400',
+                  '28,400',
                   Colors.blue,
                 ),
               ),
@@ -1029,7 +1035,7 @@ class _BillingScreenState extends State<BillingScreen>
               Expanded(
                 child: _buildPaymentStatCard(
                   'This Month',
-                  '\$125,400',
+                  '125,400',
                   Colors.purple,
                 ),
               ),
@@ -1125,7 +1131,7 @@ class _BillingScreenState extends State<BillingScreen>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '\$${(500 + index * 50).toString()}',
+              (500 + index * 50).toString(),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -1155,6 +1161,7 @@ class _BillingScreenState extends State<BillingScreen>
     );
   }
 
+  //-------------------------- Reports -------------------------------
   Widget _buildReportsTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -1269,10 +1276,10 @@ class _BillingScreenState extends State<BillingScreen>
                     ],
                   ),
                   const SizedBox(height: 16),
-                  _buildInsuranceRow('BlueCross', 12, 23000, 'approved'),
-                  _buildInsuranceRow('Aetna', 8, 18000, 'pending'),
-                  _buildInsuranceRow('Cigna', 15, 31000, 'approved'),
-                  _buildInsuranceRow('UnitedHealth', 6, 14000, 'rejected'),
+                  _buildInsuranceRow('LabAid', 12, 23000, 'approved'),
+                  _buildInsuranceRow('Sondhani', 8, 18000, 'pending'),
+                  _buildInsuranceRow('CityMedical', 15, 31000, 'approved'),
+                  _buildInsuranceRow('Prience', 6, 14000, 'rejected'),
                 ],
               ),
             ),
@@ -1397,7 +1404,7 @@ class _BillingScreenState extends State<BillingScreen>
             ),
           ),
           Text(
-            '\$${_formatCurrency(amount)}',
+            _formatCurrency(amount),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -1735,13 +1742,13 @@ class _BillingScreenState extends State<BillingScreen>
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.end,
                   children: [
-                    pw.Text('Subtotal: \$${bill.subtotal}'),
-                    pw.Text('Tax: \$${bill.tax}'),
+                    pw.Text('Subtotal: ${bill.subtotal}'),
+                    pw.Text('Tax: ${bill.tax}'),
                     if (bill.discount > 0)
-                      pw.Text('Discount: -\$${bill.discount}'),
+                      pw.Text('Discount: -${bill.discount}'),
                     pw.Divider(),
                     pw.Text(
-                      'Total: \$${bill.totalAmount}',
+                      'Total: ${bill.totalAmount}',
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,
@@ -1849,7 +1856,7 @@ class _BillingScreenState extends State<BillingScreen>
 // Additional Widgets
 
 class CreateBillScreen extends StatelessWidget {
-  const CreateBillScreen({Key? key}) : super(key: key);
+  const CreateBillScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1869,9 +1876,9 @@ class BillDetailsBottomSheet extends StatelessWidget {
   final Billing bill;
 
   const BillDetailsBottomSheet({
-    Key? key,
+    super.key,
     required this.bill,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1912,9 +1919,9 @@ class RecordPaymentDialog extends StatelessWidget {
   final Billing bill;
 
   const RecordPaymentDialog({
-    Key? key,
+    super.key,
     required this.bill,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1927,7 +1934,7 @@ class RecordPaymentDialog extends StatelessWidget {
           const TextField(
             decoration: InputDecoration(
               labelText: 'Amount',
-              prefixText: '\$',
+              prefixText: '',
             ),
           ),
           const SizedBox(height: 16),

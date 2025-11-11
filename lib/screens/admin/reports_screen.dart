@@ -38,7 +38,7 @@ class _ReportsScreenState extends State<ReportsScreen>
   // Filters
   String? _selectedDepartment;
   String? _selectedDoctor;
-  String _reportType = 'comprehensive';
+  final String _reportType = 'comprehensive';
 
   @override
   void initState() {
@@ -429,7 +429,7 @@ class _ReportsScreenState extends State<ReportsScreen>
         ),
         _buildMetricCard(
           'Revenue',
-          '\$${_formatCurrency(financial['totalRevenue'])}',
+          '${_formatCurrency(financial['totalRevenue'])}',
           Icons.attach_money,
           Colors.orange,
           '${((financial['collected'] / financial['totalRevenue']) * 100).toStringAsFixed(1)}% collected',
@@ -646,7 +646,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final dept = departments[group.x.toInt()];
                         return BarTooltipItem(
-                          '${dept['name']}\n\$${_formatCurrency(rod.toY)}\n${dept['patients']} patients',
+                          '${dept['name']}\n${_formatCurrency(rod.toY)}\n${dept['patients']} patients',
                           const TextStyle(color: Colors.white, fontSize: 10),
                         );
                       },
@@ -684,7 +684,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                         interval: 30000,
                         getTitlesWidget: (value, meta) {
                           return Text(
-                            '\$${(value / 1000).toStringAsFixed(0)}k',
+                            '${(value / 1000).toStringAsFixed(0)}k',
                             style: const TextStyle(fontSize: 10),
                           );
                         },
@@ -755,7 +755,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                       ),
                     ),
                     Text(
-                      '\$${_formatCurrency(revenue)}',
+                      '${_formatCurrency(revenue)}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -1457,7 +1457,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -1501,14 +1501,14 @@ class _ReportsScreenState extends State<ReportsScreen>
               children: [
                 _buildRevenueMetric(
                   'Total Revenue',
-                  '\$458,900',
+                  '458,900',
                   Icons.trending_up,
                   Colors.green,
                 ),
                 const SizedBox(width: 12),
                 _buildRevenueMetric(
                   'Avg per Patient',
-                  '\$367',
+                  '367',
                   Icons.person,
                   Colors.blue,
                 ),
@@ -1615,7 +1615,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                 ],
               ),
               Text(
-                '\$${_formatCurrency(amount)}',
+                _formatCurrency(amount),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -1725,7 +1725,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
-                    '\$60,400',
+                    '60,400',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -1785,7 +1785,7 @@ class _ReportsScreenState extends State<ReportsScreen>
           ),
           const SizedBox(width: 12),
           Text(
-            '\$${_formatCurrency(amount)}',
+            '${_formatCurrency(amount)}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ],
@@ -1812,11 +1812,11 @@ class _ReportsScreenState extends State<ReportsScreen>
 
   Widget _buildDoctorPerformance() {
     final doctors = [
-      {'name': 'Dr. Smith', 'patients': 145, 'rating': 4.8, 'revenue': 52000},
-      {'name': 'Dr. Johnson', 'patients': 132, 'rating': 4.6, 'revenue': 48000},
-      {'name': 'Dr. Williams', 'patients': 128, 'rating': 4.9, 'revenue': 45000},
-      {'name': 'Dr. Brown', 'patients': 115, 'rating': 4.5, 'revenue': 41000},
-      {'name': 'Dr. Davis', 'patients': 108, 'rating': 4.7, 'revenue': 38000},
+      {'name': 'Dr. Day', 'patients': 145, 'rating': 4.8, 'revenue': 52000},
+      {'name': 'Dr. Kumar', 'patients': 132, 'rating': 4.6, 'revenue': 48000},
+      {'name': 'Dr. Das', 'patients': 128, 'rating': 4.9, 'revenue': 45000},
+      {'name': 'Dr. Kamal', 'patients': 115, 'rating': 4.5, 'revenue': 41000},
+      {'name': 'Dr. Debasis', 'patients': 108, 'rating': 4.7, 'revenue': 38000},
     ];
 
     return Card(
@@ -1875,7 +1875,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              Icon(Icons.star, size: 14, color: Colors.amber),
+                              const Icon(Icons.star, size: 14, color: Colors.amber),
                               const SizedBox(width: 4),
                               Text(
                                 '${doctor['rating']}',
@@ -1890,7 +1890,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                       ),
                     ),
                     Text(
-                      '\$${_formatCurrency(doctor['revenue'] as int)}',
+                      _formatCurrency(doctor['revenue'] as int),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -1899,7 +1899,7 @@ class _ReportsScreenState extends State<ReportsScreen>
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -2342,7 +2342,7 @@ class _ReportsScreenState extends State<ReportsScreen>
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Doctor'),
               value: _selectedDoctor,
-              items: ['All', 'Dr. Smith', 'Dr. Johnson', 'Dr. Williams']
+              items: ['All', 'Dr. Das', 'Dr. Sumit', 'Dr. Dey']
                   .map((doctor) => DropdownMenuItem(
                 value: doctor,
                 child: Text(doctor),
